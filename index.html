@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>can you catch the stars ?</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="objects.js"></script>
+    <style media="screen">
+      #myCanvas {
+        background-image: url("images/nacht.jpg");
+        background-repeat: no-repeat;
+        background-size: contain;
+        cursor: none;
+      }
+      #Sound{
+        visibility: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      $(document).ready(function(){
+        game();
+      })
+
+      function game(){
+        //music();
+        $("body").mousemove(function(arg)		{
+          gezicht.Move(arg.pageX,level);
+          colection.ColisionDetect(gezicht);
+  		  });
+        var level = 0;
+        var count = 0;
+        var gezicht = new Smiley();
+        var colection = new Stars();
+        colection.Create(30);
+        var ctx = document.getElementById('myCanvas').getContext('2d');
+        loop();
+
+
+        function loop(){
+          ctx.clearRect(0,0,870,500);
+          colection.Move();
+          colection.ColisionDetect(gezicht);
+          colection.Draw(ctx);
+          gezicht.Draw(ctx);
+          document.getElementById('Score').innerHTML = colection.score;
+          if (colection.sterren.length<1) {
+            //alert("je score is: "+colection.score);
+            return;
+          }
+          count++;
+          if (count == 100) {
+            level++;
+            count = 0;
+          }
+          setTimeout(loop,33);
+        }
+      }
+
+      function reload(){
+        window.location.replace("index.html");
+      }
+
+
+
+
+    </script>
+    <canvas id="myCanvas" width="870" height="500" ></canvas>
+    <h2 id="Score"></h2>
+    <button type="button" name="button" onclick="reload()">opnieuw</button>
+    <audio id="Sound" src="sounds/muziek.mp3" controls autoplay loop>
+    </audio>
+  </body>
+</html>
